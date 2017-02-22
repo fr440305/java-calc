@@ -22,10 +22,21 @@ class ExpString {
 	public ExpList ToList() {
 		ArrayList<ExpNode> result = new ArrayList<ExpNode> ();
 		ArrayList<Integer> dig_stack = new ArrayList<Integer> ();
-		int op_depth;
+		int op_depth = 0;
 		int op_order;
 		for (int i = 0; i < this.exp_string.length; i++) {
-						/* TODO */
+			char ptr = (char)this.exp_string[i];
+			System.out.print(op_depth + ", ");
+			if (ptr == '(') {
+				op_depth ++;
+			} else if (ptr == ')') {
+				op_depth --;
+			} else if (ptr == '+' || ptr == '-' || ptr == '*' || ptr == '/') {
+				result.add(new ExpNode((int)ptr, op_depth, i));
+			} else if (ptr == (char)(-1)){
+				// Do Nothing
+				break;
+			}
 		}
 		return new ExpList(result);
 	}
@@ -48,12 +59,21 @@ class ExpNode {
 		this.type = 'n';
 		this.literal_val = number;
 	}
+	public void Print() {
+		System.out.println("{" + (char)this.literal_val + this.priority[0] + "}");
+	}
 }
 
 class ExpList {
 	private ArrayList<ExpNode> exp_list;
 	ExpList (ArrayList<ExpNode> list) {
 		this.exp_list = list;
+	}
+	public void Print() {
+		Iterator<ExpNode> I = this.exp_list.iterator();
+		while (I.hasNext()) {
+			I.next().Print();
+		}
 	}
 }
 
@@ -62,7 +82,8 @@ class ExpTree {
 
 public class App {
 	public static void main (String[] $) {
-		ExpString S = new ExpString("13");
+		ExpString S = new ExpString("(1+2)*3");
 		S.Print();
+		S.ToList();
 	}
 }
