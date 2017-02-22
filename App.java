@@ -123,13 +123,16 @@ class ExpNode {
 
 class ExpList {
 	private ArrayList<ExpNode> exp_list;
+	/**
+	 * TODO
+	 */
+	private void prio () {
+		/* TODO */
+	}
 	ExpList (ArrayList<ExpNode> list) {
 		System.out.println("ExpList::ExpList");
 		this.exp_list = list;
-		this.priorityClearify();
-	}
-	private void priorityClearify () {
-		/* TODO */
+		this.prio();
 	}
 	public void Print() {
 		Iterator<ExpNode> I = this.exp_list.iterator();
@@ -154,14 +157,23 @@ class ExpList {
 
 class ExpTree {
 	private ExpNode root;
+	ExpTree (ExpNode root) {
+		this.root = root;
+	}
 }
 
 public class App {
 	public static void main (String[] $) {
-		ExpString S = new ExpString("(1+2)*3");
+		String ori_str;
+		if ($.length != 0) {
+			ori_str = $[0];
+		} else {
+			ori_str = "(1+2)*3";
+		}
+		ExpString S = new ExpString(ori_str);
 		S.Print();
 		System.out.println("---");
-		S.ToList().ToTree();
-
+		ExpList L = S.ToList();
+		L.Print();
 	}
 }
