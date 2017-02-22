@@ -35,12 +35,11 @@ class ExpString {
 			} else if (ptr == '+' || ptr == '-' || ptr == '*' || ptr == '/') {
 				//operators
 				new_node = new ExpNode((int)ptr, op_depth, i);
-				new_node.Print();
+				//new_node.Print();
 				result.add(new_node);
 			} else if (ptr >= '0' && ptr <= '9') {
-				//digits
 				new_node = new ExpNode((int)ptr);
-				new_node.Print();
+				//new_node.Print();
 				result.add(new_node);
 			} else if (ptr == (char)(-1)){
 				// Do Nothing
@@ -68,6 +67,21 @@ class ExpNode {
 		this.type = 'n';
 		this.literal_val = number;
 	}
+	public void SetBranches (ExpNode lc, ExpNode rc, ExpNode parent) {
+		this.lc = lc;
+		this.rc = rc;
+		this.parent = parent;
+	}
+	public boolean Has(String has_what) {
+		if (has_what == "parent") {
+			if (this.parent != null) {return true;} else {return false;}
+		} else if (has_what == "lc") {
+			if (this.lc != null) {return true;} else {return false;}
+		} else {
+			//rc
+			if (this.rc != null) {return true;} else {return false;}
+		}
+	}
 	public void Print() {
 		//System.out.println("ExpNode - Print");
 		String prio;
@@ -92,17 +106,31 @@ class ExpList {
 			I.next().Print();
 		}
 	}
+	public ExpTree ToTree() {
+		//enode_arr = this.exp_list.toArray(enode_arr);
+		ExpNode[] enode_arr = new ExpNode[this.exp_list.size()];
+		Iterator<ExpNode> I = this.exp_list.iterator();
+		int i = 0;
+		while (I.hasNext()){
+			enode_arr[i] = I.next();
+			i++;
+		}
+		// now enode_arr is ExpNode[] equivalent to this.exp_list; -?-?
+		/* TODO */	
+		return null;
+	}
 }
 
 class ExpTree {
+	private ExpNode root;
 }
 
 public class App {
 	public static void main (String[] $) {
 		ExpString S = new ExpString("(1+2)*3");
 		S.Print();
-		System.out.println("---\n");
-		S.ToList().Print();
+		System.out.println("---");
+		S.ToList().ToTree();
 
 	}
 }
