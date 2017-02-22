@@ -21,7 +21,12 @@ class ExpString {
 	}
 	public ExpList ToList() {
 		ArrayList<ExpNode> result = new ArrayList<ExpNode> ();
-		
+		ArrayList<Integer> dig_stack = new ArrayList<Integer> ();
+		int op_depth;
+		int op_order;
+		for (int i = 0; i < this.exp_string.length; i++) {
+						/* TODO */
+		}
 		return new ExpList(result);
 	}
 }
