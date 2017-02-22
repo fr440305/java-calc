@@ -14,9 +14,9 @@ class ExpString {
 	public void Print() {
 		for (byte a : this.exp_string) {
 			if (a == 0) {
-				System.out.print("00H [");
+				System.out.print("[ 0, ");
 			} else if (a == -1) {
-				System.out.print("] FFH");
+				System.out.print("-1 ]");
 			} else {
 				System.out.print((char)a + ", ");
 			}
@@ -31,7 +31,6 @@ class ExpString {
 		ArrayList<Integer> dig_stack = new ArrayList<Integer> ();
 		ExpNode new_node = null;
 		int op_depth = 0;
-		int op_order;
 		for (int i = 0; i < this.exp_string.length; i++) {
 			char ptr = (char)this.exp_string[i];
 			//System.out.print(op_depth + ", ");
