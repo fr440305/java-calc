@@ -8,6 +8,9 @@ class ExpString {
 		this.exp_string[str.length() + 1] = -1; // -1 for end.
 		System.arraycopy(str.getBytes(), 0, this.exp_string, 1, str.length());
 	}
+	/**
+	 * Print() is just a testing method.
+	 */
 	public void Print() {
 		for (byte a : this.exp_string) {
 			if (a == 0) {
@@ -19,6 +22,10 @@ class ExpString {
 			}
 		}
 	}
+	/**
+	 * ToList() is the main method of class ExpString. It can
+	 * return a ExpList type Object of this.exp_string.
+	 */
 	public ExpList ToList() {
 		ArrayList<ExpNode> result = new ArrayList<ExpNode> ();
 		ArrayList<Integer> dig_stack = new ArrayList<Integer> ();
@@ -56,6 +63,9 @@ class ExpNode {
 	private float express_val;
 	private char type; // 'n' for number, and 'o' for operator.
 	private int[] priority; //{depth, meta_priority, order}
+	/** Use this constructor when you wanna construct a
+	 * operator-type ExpNode.
+	 */
 	ExpNode (int op, int depth, int order) {
 		this.type = 'o';
 		this.literal_val = op;
@@ -63,15 +73,25 @@ class ExpNode {
 		this.priority[0] = depth;
 		this.priority[2] = order;
 	}
+	/** Use this constructor when you wanna construct a
+	 *  numeric-type ExpNode.
+	 */
 	ExpNode (int number) {
 		this.type = 'n';
 		this.literal_val = number;
 	}
+	/**
+	 * You can use SetBranches() to set the left child, right child, and 
+	 * parent node of the current node.
+	 */
 	public void SetBranches (ExpNode lc, ExpNode rc, ExpNode parent) {
 		this.lc = lc;
 		this.rc = rc;
 		this.parent = parent;
 	}
+	/** Has() can be used to check if the current node has left child,
+	 * right child, or parent node.
+	 */
 	public boolean Has(String has_what) {
 		if (has_what == "parent") {
 			if (this.parent != null) {return true;} else {return false;}
@@ -82,6 +102,9 @@ class ExpNode {
 			if (this.rc != null) {return true;} else {return false;}
 		}
 	}
+	/**
+	 * Just a testing method.
+	 */
 	public void Print() {
 		//System.out.println("ExpNode - Print");
 		String prio;
