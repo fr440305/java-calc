@@ -122,7 +122,8 @@ class ExpNode {
 }
 
 class ExpList {
-	private ArrayList<ExpNode> exp_list;
+	//private ArrayList<ExpNode> exp_list;
+	private ExpNode[] exp_list;
 	/**
 	 * TODO
 	 */
@@ -130,25 +131,24 @@ class ExpList {
 		/* TODO */
 	}
 	ExpList (ArrayList<ExpNode> list) {
-		System.out.println("ExpList::ExpList");
-		this.exp_list = list;
-		this.prio();
+		//System.out.println("ExpList::ExpList");
+		//this.exp_list = list;
+		this.exp_list = new ExpNode[list.size()];
+		Iterator<ExpNode> I = list.iterator();
+		int i = 0;
+		while (I.hasNext()){
+			this.exp_list[i] = I.next();
+			i++;
+		}
+		//this.prio();
 	}
 	public void Print() {
-		Iterator<ExpNode> I = this.exp_list.iterator();
-		while (I.hasNext()) {
-			I.next().Print();
+		for (int i = 0; i < this.exp_list.length; i++) {
+			System.out.println("--{" + this.exp_list[i] + "}");
 		}
 	}
 	public ExpTree ToTree() {
 		//enode_arr = this.exp_list.toArray(enode_arr);
-		ExpNode[] enode_arr = new ExpNode[this.exp_list.size()];
-		Iterator<ExpNode> I = this.exp_list.iterator();
-		int i = 0;
-		while (I.hasNext()){
-			enode_arr[i] = I.next();
-			i++;
-		}
 		// now enode_arr is ExpNode[] equivalent to this.exp_list; -?-?
 		/* TODO */	
 		return null;
