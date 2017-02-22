@@ -22,17 +22,26 @@ class ExpString {
 	public ExpList ToList() {
 		ArrayList<ExpNode> result = new ArrayList<ExpNode> ();
 		ArrayList<Integer> dig_stack = new ArrayList<Integer> ();
+		ExpNode new_node = null;
 		int op_depth = 0;
 		int op_order;
 		for (int i = 0; i < this.exp_string.length; i++) {
 			char ptr = (char)this.exp_string[i];
-			System.out.print(op_depth + ", ");
+			//System.out.print(op_depth + ", ");
 			if (ptr == '(') {
 				op_depth ++;
 			} else if (ptr == ')') {
 				op_depth --;
 			} else if (ptr == '+' || ptr == '-' || ptr == '*' || ptr == '/') {
-				result.add(new ExpNode((int)ptr, op_depth, i));
+				//operators
+				new_node = new ExpNode((int)ptr, op_depth, i);
+				new_node.Print();
+				result.add(new_node);
+			} else if (ptr >= '0' && ptr <= '9') {
+				//digits
+				new_node = new ExpNode((int)ptr);
+				new_node.Print();
+				result.add(new_node);
 			} else if (ptr == (char)(-1)){
 				// Do Nothing
 				break;
@@ -60,13 +69,21 @@ class ExpNode {
 		this.literal_val = number;
 	}
 	public void Print() {
-		System.out.println("{" + (char)this.literal_val + this.priority[0] + "}");
+		//System.out.println("ExpNode - Print");
+		String prio;
+		if (this.type == 'n') {
+			System.out.println("{"+this.type+", "+(char)this.literal_val+"}");
+		} else if (this.type == 'o') {
+			System.out.println("{"+this.type+", "+this.priority[0]+(char)this.literal_val+this.priority[2]+"}");
+		}
+		//System.out.println("{" + (char)this.literal_val +", "+ this.priority[0] + "}");
 	}
 }
 
 class ExpList {
 	private ArrayList<ExpNode> exp_list;
 	ExpList (ArrayList<ExpNode> list) {
+		System.out.println("ExpList::ExpList");
 		this.exp_list = list;
 	}
 	public void Print() {
@@ -84,6 +101,8 @@ public class App {
 	public static void main (String[] $) {
 		ExpString S = new ExpString("(1+2)*3");
 		S.Print();
-		S.ToList();
+		System.out.println("---\n");
+		S.ToList().Print();
+
 	}
 }
