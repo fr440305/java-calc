@@ -27,6 +27,7 @@ class ExpString {
 	 * return a ExpList type Object of this.exp_string.
 	 */
 	public ExpList ToList() {
+		/* TODO */
 		ArrayList<ExpNode> result = new ArrayList<ExpNode> ();
 		ArrayList<Integer> dig_stack = new ArrayList<Integer> ();
 		ExpNode new_node = null;
@@ -56,13 +57,15 @@ class ExpString {
 	}
 }
 
-class ExpNode {
+/* This class needs to be refactored later because it is not elegant enough. */
+class ExpNode { 
 	private ExpNode lc, rc, parent;
 	private int literal_val;
 	private float express_val;
 	private char type; // 'n' for number, and 'o' for operator.
 	private int[] priority; //{depth, meta_priority, order}
-	/** Use this constructor when you wanna construct a
+	/** 
+	 * Use this constructor when you wanna construct a
 	 * operator-type ExpNode.
 	 */
 	ExpNode (int op, int depth, int order) {
@@ -72,7 +75,8 @@ class ExpNode {
 		this.priority[0] = depth;
 		this.priority[2] = order;
 	}
-	/** Use this constructor when you wanna construct a
+	/** 
+	 * Use this constructor when you wanna construct a
 	 *  numeric-type ExpNode.
 	 */
 	ExpNode (int number) {
@@ -88,7 +92,8 @@ class ExpNode {
 		this.rc = rc;
 		this.parent = parent;
 	}
-	/** Has() can be used to check if the current node has left child,
+	/** 
+	 * Has() can be used to check if the current node has left child,
 	 * right child, or parent node.
 	 */
 	public boolean Has(String has_what) {
@@ -121,6 +126,10 @@ class ExpList {
 	ExpList (ArrayList<ExpNode> list) {
 		System.out.println("ExpList::ExpList");
 		this.exp_list = list;
+		this.priorityClearify();
+	}
+	private void priorityClearify () {
+		/* TODO */
 	}
 	public void Print() {
 		Iterator<ExpNode> I = this.exp_list.iterator();
