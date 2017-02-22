@@ -128,7 +128,17 @@ class ExpList {
 	 * TODO
 	 */
 	private void prio () {
-		/* TODO */
+		boolean add_sub, mul_div;
+		int depth = 0;
+		int magnitude = 0;
+		do {
+			//search for mul_div;
+			for (int i = 0; i < this.exp_list.length; i++) {
+			}
+			//search for add_sub;
+			for (int i = 0; i < this.exp_list.length; i++) {
+			}
+		} while (add_sub == 0 && mul_div == 0);
 	}
 	ExpList (ArrayList<ExpNode> list) {
 		//System.out.println("ExpList::ExpList");
@@ -144,7 +154,7 @@ class ExpList {
 	}
 	public void Print() {
 		for (int i = 0; i < this.exp_list.length; i++) {
-			System.out.println("--{" + this.exp_list[i] + "}");
+			this.exp_list[i].Print();
 		}
 	}
 	public ExpTree ToTree() {
