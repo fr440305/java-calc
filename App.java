@@ -84,6 +84,16 @@ class ExpNode {
 		this.literal_val = number;
 	}
 	/**
+	 *
+	 */
+	public int[] GetPrio () {
+		if (this.type == 'o') {
+			return this.priority;
+		} else {
+			return null;
+		}
+	}
+	/**
 	 * You can use SetBranches() to set the left child, right child, and 
 	 * parent node of the current node.
 	 */
@@ -115,7 +125,13 @@ class ExpNode {
 		if (this.type == 'n') {
 			System.out.println("{"+this.type+", "+(char)this.literal_val+"}");
 		} else if (this.type == 'o') {
-			System.out.println("{"+this.type+", "+this.priority[0]+(char)this.literal_val+this.priority[2]+"}");
+			System.out.println(
+				"{"+
+				this.type+ ", "+
+				this.priority[0]+
+				(char)this.literal_val+
+				this.priority[2]+"}"
+			);
 		}
 		//System.out.println("{" + (char)this.literal_val +", "+ this.priority[0] + "}");
 	}
@@ -134,10 +150,14 @@ class ExpList {
 		do {
 			//search for mul_div;
 			for (int i = 0; i < this.exp_list.length; i++) {
+				if (this.exp_list[i].GetPrio() != null) {
+					this.
+				}
 			}
 			//search for add_sub;
 			for (int i = 0; i < this.exp_list.length; i++) {
 			}
+			depth++;
 		} while (add_sub == 0 && mul_div == 0);
 	}
 	ExpList (ArrayList<ExpNode> list) {
