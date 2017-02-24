@@ -103,6 +103,9 @@ class ExpNode {
 	/**
 	 *
 	 */
+	public int GetPriority () {
+		return this.priority;
+	}
 	public void SetPriority (int priority) {
 		this.priority = priority;
 	}
@@ -134,7 +137,6 @@ class ExpNode {
 	 */
 	public void Print() {
 		//System.out.println("ExpNode - Print");
-		String prio;
 		if (this.type == 'n') {
 			System.out.println("{"+this.type+", "+(char)this.literal_val+"}");
 		} else if (this.type == 'o') {
@@ -147,6 +149,7 @@ class ExpNode {
 class ExpList {
 	//private ArrayList<ExpNode> exp_list;
 	private ExpNode[] exp_list;
+	private int max_priority;
 	/**
 	 * TODO
 	 */
@@ -182,6 +185,7 @@ class ExpList {
 			}
 			depth++;
 		} while (add_sub == true || mul_div == true);
+		this.max_priority = magnitude - 1;
 	}
 	ExpList (ArrayList<ExpNode> list) {
 		//System.out.println("ExpList::ExpList");
@@ -196,15 +200,49 @@ class ExpList {
 		this.setPriority();
 	}
 	public void Print() {
+		System.out.println("max-priority = " + this.max_priority);
 		for (int i = 0; i < this.exp_list.length; i++) {
 			this.exp_list[i].Print();
 		}
 	}
+	/**
+	 * a recurision func.
+	 */
+	private ExpNode conNode (int priority) {
+		ExpNode prio_op = null;
+		ExpNode op_lc = null;
+		ExpNode op_rc = null;
+		int prio_op_index = 0;
+		// seek for prio_op:
+		for (int i = 0; i < this.exp_list.length; i++) {
+			if (this.exp_list[i].GetPriority() == priority) {
+				prio_op = this.exp_list[i];
+				prio_op_index = i;
+			}
+		}
+		for (int i = prio_op_index - 1; i >= 0; i--) {
+			if (!this.exp_list[i].Has("parent")) {
+				op_lc = this.exp_list[i];
+			}
+		}
+		for (int i = prio_op_index + 1; i < this.exp_list.length; i++) {
+			if (!this.exp_list[i].Has("parent")) {
+				op_rc = this.exp_list[i];
+			}
+		}
+		prio_op.SetBranches(op_lc, op_rc, null);
+		op_lc.SetBranches(null, null, prio_op);
+		op_rc.SetBranches(null, null, prio_op);
+		//System.out.println((char)prio_op.GetLitVal() + ", " + (char));
+		if (priority != 0) {
+			this.conNode(priority - 1);
+		}
+		return prio_op;
+	}
 	public ExpTree ToTree() {
 		//enode_arr = this.exp_list.toArray(enode_arr);
 		// now enode_arr is ExpNode[] equivalent to this.exp_list; -?-?
-		/* TODO */	
-		return null;
+		return new ExpTree(this.conNode(this.max_priority));
 	}
 }
 
@@ -228,5 +266,6 @@ public class App {
 		System.out.println("---");
 		ExpList L = S.ToList();
 		L.Print();
+		L.ToTree();
 	}
 }
