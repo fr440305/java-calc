@@ -41,6 +41,7 @@ class ExpString {
 				op_depth --;
 			} else if (ptr == '+' || ptr == '-' || ptr == '*' || ptr == '/') {
 				//operators
+				/* TODO - modified the priority here !!!*/
 				new_node = new ExpNode((int)ptr, op_depth, i);
 				//new_node.Print();
 				result.add(new_node);
@@ -63,17 +64,15 @@ class ExpNode {
 	private int literal_val;
 	private float express_val;
 	private char type; // 'n' for number, and 'o' for operator.
-	private int[] priority; //{depth, meta_priority, order}
+	private int priority;
 	/** 
 	 * Use this constructor when you wanna construct a
 	 * operator-type ExpNode.
 	 */
-	ExpNode (int op, int depth, int order) {
+	ExpNode (int op, int priority) {
 		this.type = 'o';
 		this.literal_val = op;
-		this.priority = new int[3];
-		this.priority[0] = depth;
-		this.priority[2] = order;
+		this.priority = priority;
 	}
 	/** 
 	 * Use this constructor when you wanna construct a
@@ -82,16 +81,6 @@ class ExpNode {
 	ExpNode (int number) {
 		this.type = 'n';
 		this.literal_val = number;
-	}
-	/**
-	 *
-	 */
-	public int[] GetPrio () {
-		if (this.type == 'o') {
-			return this.priority;
-		} else {
-			return null;
-		}
 	}
 	/**
 	 * You can use SetBranches() to set the left child, right child, and 
@@ -125,13 +114,7 @@ class ExpNode {
 		if (this.type == 'n') {
 			System.out.println("{"+this.type+", "+(char)this.literal_val+"}");
 		} else if (this.type == 'o') {
-			System.out.println(
-				"{"+
-				this.type+ ", "+
-				this.priority[0]+
-				(char)this.literal_val+
-				this.priority[2]+"}"
-			);
+			System.out.println( "{" + this.type + ", " + this.priority + "}");
 		}
 		//System.out.println("{" + (char)this.literal_val +", "+ this.priority[0] + "}");
 	}
