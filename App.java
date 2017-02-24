@@ -72,7 +72,7 @@ class ExpNode {
 	ExpNode (int op, int depth) {
 		this.type = 'o';
 		this.literal_val = op;
-		this.priority = priority;
+		this.depth = depth;
 	}
 	/** 
 	 * Use this constructor when you wanna construct a
@@ -81,6 +81,18 @@ class ExpNode {
 	ExpNode (int number) {
 		this.type = 'n';
 		this.literal_val = number;
+	}
+	/**
+	 *
+	 */
+	public int GetLitVal () {
+		return this.literal_val;
+	}
+	/**
+	 *
+	 */
+	public int GetType () {
+		return this.type;
 	}
 	/**
 	 *
@@ -142,11 +154,34 @@ class ExpList {
 		boolean add_sub = false, mul_div = false;
 		int depth = 0;
 		int magnitude = 0;
+		ExpNode ptr_node;
 		do {
-			//search for mul_div;
+			add_sub = false;
+			mul_div = false;
 			//search for add_sub;
+			for (int i = 0; i < this.exp_list.length; i++) {
+				ptr_node = this.exp_list[i];
+				if (ptr_node.GetType() == 'o' && ptr_node.GetDepth() == depth) {
+					if (ptr_node.GetLitVal() == (int)'+' || ptr_node.GetLitVal() == (int)'-') {
+						add_sub = true;
+						ptr_node.SetPriority(magnitude);
+						magnitude++;
+					}
+				}
+			}
+			//mul_div
+			for (int i = 0; i < this.exp_list.length; i++) {
+				ptr_node = this.exp_list[i];
+				if (ptr_node.GetType() == 'o' && ptr_node.GetDepth() == depth) {
+					if (ptr_node.GetLitVal() == (int)'*' || ptr_node.GetLitVal() == (int)'/') {
+						mul_div = true;
+						ptr_node.SetPriority(magnitude);
+						magnitude++;
+					}
+				}
+			}
 			depth++;
-		} while (add_sub == false && mul_div == false);
+		} while (add_sub == true || mul_div == true);
 	}
 	ExpList (ArrayList<ExpNode> list) {
 		//System.out.println("ExpList::ExpList");
@@ -158,7 +193,7 @@ class ExpList {
 			this.exp_list[i] = I.next();
 			i++;
 		}
-		//this.prio();
+		this.setPriority();
 	}
 	public void Print() {
 		for (int i = 0; i < this.exp_list.length; i++) {
@@ -186,7 +221,7 @@ public class App {
 		if ($.length != 0) {
 			ori_str = $[0];
 		} else {
-			ori_str = "(1+2)*3";
+			ori_str = "(1+(5*6)+2)*3";
 		}
 		ExpString S = new ExpString(ori_str);
 		S.Print();
