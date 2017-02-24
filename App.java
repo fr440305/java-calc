@@ -41,8 +41,7 @@ class ExpString {
 				op_depth --;
 			} else if (ptr == '+' || ptr == '-' || ptr == '*' || ptr == '/') {
 				//operators
-				/* TODO - modified the priority here !!!*/
-				new_node = new ExpNode((int)ptr, op_depth, i);
+				new_node = new ExpNode((int)ptr, op_depth);
 				//new_node.Print();
 				result.add(new_node);
 			} else if (ptr >= '0' && ptr <= '9') {
@@ -64,12 +63,13 @@ class ExpNode {
 	private int literal_val;
 	private float express_val;
 	private char type; // 'n' for number, and 'o' for operator.
+	private int depth; // appeard in how many levels of bracket-pairs?
 	private int priority;
 	/** 
 	 * Use this constructor when you wanna construct a
 	 * operator-type ExpNode.
 	 */
-	ExpNode (int op, int priority) {
+	ExpNode (int op, int depth) {
 		this.type = 'o';
 		this.literal_val = op;
 		this.priority = priority;
@@ -81,6 +81,18 @@ class ExpNode {
 	ExpNode (int number) {
 		this.type = 'n';
 		this.literal_val = number;
+	}
+	/**
+	 *
+	 */
+	public int GetDepth () {
+		return this.depth;
+	}
+	/**
+	 *
+	 */
+	public void SetPriority (int priority) {
+		this.priority = priority;
 	}
 	/**
 	 * You can use SetBranches() to set the left child, right child, and 
@@ -126,22 +138,15 @@ class ExpList {
 	/**
 	 * TODO
 	 */
-	private void prio () {
-		boolean add_sub, mul_div;
+	private void setPriority () {
+		boolean add_sub = false, mul_div = false;
 		int depth = 0;
 		int magnitude = 0;
 		do {
 			//search for mul_div;
-			for (int i = 0; i < this.exp_list.length; i++) {
-				if (this.exp_list[i].GetPrio() != null) {
-					this.
-				}
-			}
 			//search for add_sub;
-			for (int i = 0; i < this.exp_list.length; i++) {
-			}
 			depth++;
-		} while (add_sub == 0 && mul_div == 0);
+		} while (add_sub == false && mul_div == false);
 	}
 	ExpList (ArrayList<ExpNode> list) {
 		//System.out.println("ExpList::ExpList");
