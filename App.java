@@ -328,7 +328,7 @@ class ExpTree {
 	}
 }
 
-public class newClass {
+public class App {
 	public static void main (String[] $) {
 		String ori_str;
 		if ($.length != 0) {
