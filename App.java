@@ -86,8 +86,13 @@ class ExpNode {
 		this.lc = null;
 		this.rc = null;
 		this.type = 'n';
+<<<<<<< HEAD
 		this.literal_val = number;
 		this.express_val = (float)number;
+=======
+		this.literal_val = number - 48;
+		this.express_val = (float)this.literal_val;
+>>>>>>> 1906998
 	}
 	public int GetLitVal () {
 		return this.literal_val;
@@ -124,10 +129,14 @@ class ExpNode {
 	 * You can use SetBranches() to set the left child, right child, and 
 	 * parent node of the current node.
 	 */
-	public void SetBranches (ExpNode lc, ExpNode rc, ExpNode parent) {
-		this.lc = lc;
-		this.rc = rc;
+	public void SetParent (ExpNode parent) {
 		this.parent = parent;
+	}
+	public void SetRc (ExpNode rc) {
+		this.rc = rc;
+	}
+	public void SetLc (ExpNode lc) {
+		this.lc = lc;
 	}
 	/** 
 	 * Has() can be used to check if the current node has left child,
@@ -149,7 +158,7 @@ class ExpNode {
 	public void Print() {
 		//System.out.println("ExpNode - Print");
 		if (this.type == 'n') {
-			System.out.println("{"+this.type+", "+(char)this.literal_val+"}");
+			System.out.println("{"+this.type+", "+ this.literal_val+"}");
 		} else if (this.type == 'o') {
 			System.out.println( "{" + this.type + ", " + (char)this.literal_val + ", " + this.priority + "}");
 		}
@@ -219,6 +228,7 @@ class ExpList {
 	/**
 	 * a recurision func.
 	 */
+<<<<<<< HEAD
 	private ExpNode conNode (int priority) {
 		System.out.println("conNode - " + priority);
 		ExpNode prio_op = null;
@@ -264,12 +274,63 @@ class ExpList {
 			this.conNode(priority - 1);
 		}
 		return prio_op;
+=======
+	private ExpNode conNode () {
+		for (int priority = this.max_priority; priority >= 0; priority--) {
+			System.out.println("conNode - " + priority);
+			ExpNode prio_op = null;
+			ExpNode op_lc = null;
+			ExpNode op_rc = null;
+			int prio_op_index = 0;
+			// seek for prio_op:
+			for (int i = 0; i < this.exp_list.length; i++) {
+				if (this.exp_list[i].GetType() == 'o' && this.exp_list[i].GetPriority() == priority) {
+					prio_op = this.exp_list[i];
+					prio_op_index = i;
+					break;
+				}
+			}
+			//System.out.println(prio_op_index);
+			//prio_op.Print();
+			for (int i = prio_op_index - 1; i >= 0; i--) {
+				if (!this.exp_list[i].Has("parent")) {
+					op_lc = this.exp_list[i];
+					System.out.println("op-lc = " + i);
+					break;
+				}
+			}
+			//op_lc.Print();
+			for (int i = prio_op_index + 1; i < this.exp_list.length; i++) {
+				if (!this.exp_list[i].Has("parent")) {
+					op_rc = this.exp_list[i];
+					System.out.println("op-rc = " + i);
+					break;
+				}
+			}
+			//op_rc.Print();
+			prio_op.SetLc(op_lc);
+			prio_op.SetRc(op_rc);
+			op_lc.SetParent(prio_op);
+			op_rc.SetParent(prio_op);
+			System.out.println("prio_op - " + prio_op);
+			prio_op.Print();
+			System.out.println("op_lc - " + prio_op.GetNode("lc"));
+			op_lc.Print();
+			System.out.println("op_rc - " + prio_op.GetNode("rc"));
+			op_rc.Print();
+		}
+		return null;
+>>>>>>> 1906998
 	}
 	public ExpTree ToTree() {
 		//enode_arr = this.exp_list.toArray(enode_arr);
 		// now enode_arr is ExpNode[] equivalent to this.exp_list; -?-?
 
+<<<<<<< HEAD
 		this.conNode(this.max_priority);
+=======
+		this.conNode();
+>>>>>>> 1906998
 		for (int i = 0; i < this.exp_list.length; i++) {
 			if (this.exp_list[i].GetType() == 'o' && this.exp_list[i].GetPriority() == 0) {
 				return new ExpTree(this.exp_list[i]);
@@ -287,6 +348,12 @@ class ExpTree {
 		ExpTree.fillNodeExpVal(root);
 		this.root = root;
 	}
+<<<<<<< HEAD
+=======
+	public ExpNode GetRoot () {
+		return this.root;
+	}
+>>>>>>> 1906998
 	private static void fillNodeExpVal (ExpNode root) {
 		System.out.println("ExpTree::fillNodeExpVal()");
 		System.out.println("root = " + root);
@@ -313,17 +380,33 @@ class ExpTree {
 			} else if (root.GetLitVal() == (int)'/') {
 				root.SetExpVal(lc_expval / rc_expval);
 			} 
+<<<<<<< HEAD
 		} else {}
 	}
+=======
+			System.out.println(lc_expval + ", " + rc_expval);
+		} else {}
+	}
+	public float GetTreeVal () {
+		System.out.println(this.root.GetExpVal());
+		return this.root.GetExpVal();
+	}
+>>>>>>> 1906998
 }
 
-public class App {
+public class newClass {
 	public static void main (String[] $) {
 		String ori_str;
 		if ($.length != 0) {
 			ori_str = $[0];
 		} else {
+<<<<<<< HEAD
 			ori_str = "(1+(5*6)+2)*3";
+=======
+			Scanner S = new Scanner(System.in);
+			String R = S.nextLine();
+			ori_str = R;
+>>>>>>> 1906998
 		}
 		ExpString S = new ExpString(ori_str);
 		S.Print();
@@ -331,6 +414,11 @@ public class App {
 		ExpList L = S.ToList();
 		L.Print();
 		ExpTree T = L.ToTree();
+<<<<<<< HEAD
 		
+=======
+		T.GetTreeVal();
+
+>>>>>>> 1906998
 	}
 }
