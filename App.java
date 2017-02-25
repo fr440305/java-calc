@@ -70,6 +70,9 @@ class ExpNode {
 	 * operator-type ExpNode.
 	 */
 	ExpNode (int op, int depth) {
+		this.parent = null;
+		this.lc = null;
+		this.rc = null;
 		this.type = 'o';
 		this.literal_val = op;
 		this.depth = depth;
@@ -79,32 +82,40 @@ class ExpNode {
 	 *  numeric-type ExpNode.
 	 */
 	ExpNode (int number) {
+		this.parent = null;
+		this.lc = null;
+		this.rc = null;
 		this.type = 'n';
 		this.literal_val = number;
+		this.express_val = (float)number;
 	}
-	/**
-	 *
-	 */
 	public int GetLitVal () {
 		return this.literal_val;
 	}
-	/**
-	 *
-	 */
+	public float GetExpVal () {
+		return this.express_val;
+	}
 	public int GetType () {
 		return this.type;
 	}
-	/**
-	 *
-	 */
 	public int GetDepth () {
 		return this.depth;
 	}
-	/**
-	 *
-	 */
 	public int GetPriority () {
 		return this.priority;
+	}
+	public ExpNode GetNode (String sort) {
+		if (sort == "lc") {
+			return this.lc;
+		} else if (sort == "rc") {
+			return this.rc;
+		} else {
+			//parent
+			return this.parent;
+		}
+	}
+	public void SetExpVal (float expval) {
+		this.express_val = expval;
 	}
 	public void SetPriority (int priority) {
 		this.priority = priority;
@@ -140,7 +151,7 @@ class ExpNode {
 		if (this.type == 'n') {
 			System.out.println("{"+this.type+", "+(char)this.literal_val+"}");
 		} else if (this.type == 'o') {
-			System.out.println( "{" + this.type + ", " + this.priority + "}");
+			System.out.println( "{" + this.type + ", " + (char)this.literal_val + ", " + this.priority + "}");
 		}
 		//System.out.println("{" + (char)this.literal_val +", "+ this.priority[0] + "}");
 	}
@@ -209,31 +220,46 @@ class ExpList {
 	 * a recurision func.
 	 */
 	private ExpNode conNode (int priority) {
+		System.out.println("conNode - " + priority);
 		ExpNode prio_op = null;
 		ExpNode op_lc = null;
 		ExpNode op_rc = null;
 		int prio_op_index = 0;
 		// seek for prio_op:
 		for (int i = 0; i < this.exp_list.length; i++) {
-			if (this.exp_list[i].GetPriority() == priority) {
+			if (this.exp_list[i].GetType() == 'o' && this.exp_list[i].GetPriority() == priority) {
 				prio_op = this.exp_list[i];
 				prio_op_index = i;
+				break;
 			}
 		}
+		//System.out.println(prio_op_index);
+		//prio_op.Print();
 		for (int i = prio_op_index - 1; i >= 0; i--) {
 			if (!this.exp_list[i].Has("parent")) {
 				op_lc = this.exp_list[i];
+				System.out.println("op-lc = " + i);
+				break;
 			}
 		}
+		//op_lc.Print();
 		for (int i = prio_op_index + 1; i < this.exp_list.length; i++) {
 			if (!this.exp_list[i].Has("parent")) {
 				op_rc = this.exp_list[i];
+				System.out.println("op-rc = " + i);
+				break;
 			}
 		}
+		//op_rc.Print();
 		prio_op.SetBranches(op_lc, op_rc, null);
 		op_lc.SetBranches(null, null, prio_op);
 		op_rc.SetBranches(null, null, prio_op);
-		//System.out.println((char)prio_op.GetLitVal() + ", " + (char));
+		System.out.println("prio_op - " + prio_op);
+		prio_op.Print();
+		System.out.println("op_lc - " + prio_op.GetNode("lc"));
+		op_lc.Print();
+		System.out.println("op_rc - " + prio_op.GetNode("rc"));
+		op_rc.Print();
 		if (priority != 0) {
 			this.conNode(priority - 1);
 		}
@@ -242,14 +268,52 @@ class ExpList {
 	public ExpTree ToTree() {
 		//enode_arr = this.exp_list.toArray(enode_arr);
 		// now enode_arr is ExpNode[] equivalent to this.exp_list; -?-?
-		return new ExpTree(this.conNode(this.max_priority));
+
+		this.conNode(this.max_priority);
+		for (int i = 0; i < this.exp_list.length; i++) {
+			if (this.exp_list[i].GetType() == 'o' && this.exp_list[i].GetPriority() == 0) {
+				return new ExpTree(this.exp_list[i]);
+			}
+		}
+		return null; //extra statement.
 	}
 }
 
 class ExpTree {
 	private ExpNode root;
 	ExpTree (ExpNode root) {
+		System.out.println("ExpTree::<init>");
+		root.Print();
+		ExpTree.fillNodeExpVal(root);
 		this.root = root;
+	}
+	private static void fillNodeExpVal (ExpNode root) {
+		System.out.println("ExpTree::fillNodeExpVal()");
+		System.out.println("root = " + root);
+		root.Print();
+		ExpNode root_lc = root.GetNode("lc");
+		System.out.println("lc = " + root_lc);
+		root_lc.Print();
+		ExpNode root_rc = root.GetNode("rc");
+		System.out.println("rc = " + root_rc);
+		root_rc.Print();
+		float lc_expval;
+		float rc_expval;
+		if (root.GetType() == 'o') {
+			if (root_lc.GetType() == 'o') { fillNodeExpVal(root_lc); }
+			if (root_rc.GetType() == 'o') { fillNodeExpVal(root_rc); }
+			lc_expval = root_lc.GetExpVal();
+			rc_expval = root_rc.GetExpVal();
+			if (root.GetLitVal() == (int)'+') {
+				root.SetExpVal(lc_expval + rc_expval);
+			} else if (root.GetLitVal() == (int)'-') {
+				root.SetExpVal(lc_expval - rc_expval);
+			} else if (root.GetLitVal() == (int)'*') {
+				root.SetExpVal(lc_expval * rc_expval);
+			} else if (root.GetLitVal() == (int)'/') {
+				root.SetExpVal(lc_expval / rc_expval);
+			} 
+		} else {}
 	}
 }
 
@@ -266,6 +330,7 @@ public class App {
 		System.out.println("---");
 		ExpList L = S.ToList();
 		L.Print();
-		L.ToTree();
+		ExpTree T = L.ToTree();
+		
 	}
 }
