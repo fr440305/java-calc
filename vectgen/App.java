@@ -23,13 +23,18 @@ class vectorGenerics {
 		System.out.println("max of vect1: " + Collections.min(this.vect1));
 		System.out.println("max of vect2: " + Collections.min(this.vect2));
 	}
-	public void addAll () {
+	public void addAll (Vector<Integer> vect3) {
+		this.vect3 = vect3;
+		this.vect1.addAll(this.vect3);
 	}
 	public void reverse () {
+		Collections.reverse(this.vect3);
 	}
 	public void shuffle () {
+		Collections.shuffle(this.vect1);
 	}
 	public void rotate () {
+		// ???
 	}
 	public void clear () {
 		this.vect1.clear();
