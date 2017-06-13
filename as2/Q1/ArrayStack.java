@@ -30,7 +30,6 @@ public class ArrayStack<T> implements Stack<T> {
 		if (this.size != 0) {
 			return (T)this.arr[this.size - 1];
 		} else {
-			//Could you please fucking tell me what should I do right now.
 			return null;
 		}
 	}

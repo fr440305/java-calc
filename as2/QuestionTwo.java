@@ -1,5 +1,11 @@
+//...
+//
 public class QuestionTwo {
 	public static void main (String[] args) {
+		/*
+		 * For Kevin Lee: Do it by yourself...
+		 * Sample Code:
+		 *
 		System.out.println("q2 <<<<<<<");
 		MyCalculator mc = new MyCalculator();
 		//System.out.println(mc.isBalanced("()()()()(()"));
@@ -7,7 +13,7 @@ public class QuestionTwo {
 		System.out.println("(2-3*4)+1");
 		System.out.println(mc.idofRootOperator("(2-3*4)+1"));
 		System.out.println(mc.infixToPostfix("(2-3*4)+1"));
-		System.out.println("_________________________________");
 		System.out.println( mc.evaluate(mc.infixToPostfix("(2-3*4)+1")) );
+		*/
 	}
 }
