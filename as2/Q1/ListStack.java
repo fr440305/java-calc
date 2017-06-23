@@ -21,6 +21,9 @@ public class ListStack<T> implements Stack<T> {
 		this.size = 0;
 		this.cap = cap;
 	}
+	public int size () {
+		return this.size;
+	}
 	public boolean isEmpty () {
 		if (this.size == 0) {
 			return true;
@@ -107,7 +110,7 @@ public class ListStack<T> implements Stack<T> {
 		if (isEmpty()) {
 			System.out.println("...empty...");
 		} else {
-			System.out.println(this.toString() + " | STACK_BOTTOM");
+			System.out.println(this.toString());
 		}
 	}
 }
