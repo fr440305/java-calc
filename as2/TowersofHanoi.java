@@ -61,4 +61,7 @@ class TowersofHanoi {
 			}
 		}
 	}
+	public boolean done () {
+		if (this.rods[0].isEmpty() && this.rods[1].isEmpty()) return true; else return false;
+	}
 }
