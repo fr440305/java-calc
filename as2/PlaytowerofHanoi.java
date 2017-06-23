@@ -12,7 +12,7 @@ class PlayTowerofHanoi {
 			System.out.println("How many disks would you like: ");
 			tower_cap = input.nextInt();
 			if (tower_cap <= 0)
-				System.out.println(" you $hit. input again.");
+				System.out.println("Can not be negative. Input again.");
 			else
 				break;
 		}
@@ -51,7 +51,7 @@ class PlayTowerofHanoi {
 					toh.showTowerStates();
 					return;
 				default:
-					System.out.println(" you $hit. input again.");
+					System.out.println("Just 1 or 2. input again.");
 			}
 		}
 	}
