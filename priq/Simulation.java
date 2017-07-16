@@ -45,7 +45,7 @@ public class Simulation{
   }
   
   public static void main(String[] args){
-    Queue jobs = new LinkedListQueue(); // Replace null with the queue you want to test
+    Queue jobs = new PriorityQueue(); // Replace null with the queue you want to test
     Simulation simulator = new Simulation(jobs);
     simulator.run();
   }
